@@ -1,0 +1,16 @@
+{
+  "name": "featuresearch",
+  "version": "0.0.0",
+  "description": "Technikworkshop project",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lodash": "~2.2.1"
+  }
+}
