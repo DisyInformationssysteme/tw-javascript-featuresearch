@@ -57,35 +57,34 @@ describe("Feature Search", function() {
     describe("FR1 - Ich muss über beliebige Objekte nach beliebige Wörter suchen können", function() {
 
         it("returns results over subset of features when no field is specified", function() {
-            var results = index.search("Feldhecken");
-            expect(results.length).toBe(3);
+            assertSearchResultCount("Feldhecken", 3);
         });
 
 
         it("returns no results when a term is searched which is not available", function() {
-            var results = index.search("Feldheckens");
-            expect(results.length).toBe(0);
+            assertSearchResultCount("Feldheckens", 0);
         });
 
         it("finds results for more than one search token", function() {
-            var results = index.search("Feldhecken, Feldgehölze");
-            expect(results.length).toBe(3);
+            assertSearchResultCount("Feldhecken, Feldgehölze", 3);
         });
 
         it("finds results for integers", function() {
-            var results = index.search("300");
-            expect(results.length).toBe(1);
+            assertSearchResultCount("300", 1);
         });
 
         it("finds results for floats", function() {
-            var results = index.search(854.5);
-            expect(results.length).toBe(1);
+            assertSearchResultCount(854.5, 1);
         });
 
         it("finds results for more than one search token over several fields", function() {
-            var results = index.search("Feldhecken, Feldgehölze Schießmauer");
-            expect(results.length).toBe(1);
+            assertSearchResultCount("Feldhecken, Feldgehölze Schießmauer", 1);
         });
+
+        function assertSearchResultCount(searchInput, expectedResultCount) {
+            var results = index.search(searchInput);
+            expect(results.length).toBe(expectedResultCount);
+        }
 
         describe("We can tokenize a given object", function() {
 
