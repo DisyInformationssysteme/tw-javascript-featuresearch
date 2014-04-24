@@ -8,7 +8,7 @@ function Index() {
     this.add = function(document) {
         var tokens = this._tokenize(document);
         for (var i = 0; i < tokens.length; i++) {
-            var token = tokens[i];
+            var token = tokens[i].toLowerCase();
             if (this.indexMap[token] === undefined) {
                 this.indexMap[token] = [document];
             } else {
@@ -53,7 +53,7 @@ function Index() {
         var searchTermTokens = this._tokenize(term);
         var that = this;
         var allTokenDocuments = _.map(searchTermTokens, function(token) {
-            return that.indexMap[token] || [];
+            return that.indexMap[token.toLowerCase()] || [];
         });
         var minimalTokenDocuments = _.min(allTokenDocuments, function(tokenDocuments) {
             return tokenDocuments.length;

@@ -72,6 +72,10 @@ describe("Feature Search", function() {
             assertSearchResultCount("Feldhecken, Feldgehölze", 3);
         });
 
+        it("returns results regardless of case with more than one search token", function() {
+            assertSearchResultCount("FELDHECKEN, FELDGEHÖLZE", 3);
+        });
+
         it("finds results for integers", function() {
             assertSearchResultCount("300", 1);
         });
@@ -102,6 +106,12 @@ describe("Feature Search", function() {
 
         it("finds no results when one token cannot be found", function() {
             assertSearchResultCount("Feldhecken, Feldgehölze Schießmauer Radoslav", 0);
+        });
+
+        it("correct results", function() {
+            var results = index.search("Schießmauer");
+            expect(results).toBeArrayOfSize(1);
+            expect(results[0].properties.SID).toEqual(184);
         });
 
         function assertSearchResultCount(searchInput, expectedResultCount) {

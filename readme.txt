@@ -2,7 +2,7 @@ Sitzordnung:
 - Roman, Klaus, Radi, Martin, Karsten, Benjamin
 
 Next up:
-- Karsten
+- Benjamin
 
 TODO:
-- boris Github name ändern
+- weitere Tests auf Inhalt
