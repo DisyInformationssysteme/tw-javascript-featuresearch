@@ -60,9 +60,12 @@ describe("Feature Search", function() {
             assertSearchResultCount("Feldhecken", 3);
         });
 
+        it("returns results regardless of case", function() {
+            assertSearchResultCount("FELDHECKEN", 3);
+        });
 
         it("returns no results when a term is searched which is not available", function() {
-            assertSearchResultCount("Feldheckens", 0);
+            assertSearchResultCount("Radoslav", 0);
         });
 
         it("finds results for more than one search token", function() {
@@ -77,8 +80,28 @@ describe("Feature Search", function() {
             assertSearchResultCount(854.5, 1);
         });
 
+        it("finds no results for empty search token", function() {
+            assertSearchResultCount("", 0);
+        });
+
+        it("finds no results for whitespace search token", function() {
+            assertSearchResultCount("     ", 0);
+        });
+
+        it("finds no results for undefined search token", function() {
+            assertSearchResultCount(undefined, 0);
+        });
+
+        it("finds no results for null as search token", function() {
+            assertSearchResultCount(null, 0);
+        });
+
         it("finds results for more than one search token over several fields", function() {
             assertSearchResultCount("Feldhecken, Feldgehölze Schießmauer", 1);
+        });
+
+        it("finds no results when one token cannot be found", function() {
+            assertSearchResultCount("Feldhecken, Feldgehölze Schießmauer Radoslav", 0);
         });
 
         function assertSearchResultCount(searchInput, expectedResultCount) {
