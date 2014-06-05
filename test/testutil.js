@@ -9,5 +9,4 @@ var TestUtil = {
             expect(testfunction.apply(scope, [input])).toEqual(output);
         };
     }
-
 };

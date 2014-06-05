@@ -119,6 +119,15 @@ describe("Feature Search", function() {
             expect(results.length).toBe(expectedResultCount);
         }
 
+        function assertSearchResult(searchInput, expectedSids) {
+            var results = index.search(searchInput);
+            expect(results).toBeArrayOfSize(expectedSids.length);
+            var searchResultSids = _.map(results, function(result) {
+                return result.properties.SID;
+            });
+            expect(_.intersection(searchResultSids, expectedSids)).toBeArrayOfSize(expectedSids.length);
+        }
+
         describe("We can tokenize a given object", function() {
 
             it("tokenizes primitives, null and undefined", function() {
