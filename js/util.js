@@ -19,5 +19,13 @@ var Util = {
             }
         }
         return true;
+    },
+
+    dropDuplicates: function (items) {
+        // leeres array result
+        // Schleife über alle items
+        // zu result hinzufügen falls item noch nicht in result enthalten ist
+        // oder halt Lodash!
+        return items;
     }
 };

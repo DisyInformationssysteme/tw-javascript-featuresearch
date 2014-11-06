@@ -4,9 +4,12 @@ function Index() {
     // Mapping zwischen tokens und array von Dokumenten wo das 
     // Token enthalten ist
     this.indexMap = {};
+    this.documentCount = 0;
+    var that = this;
 
     this.add = function(document) {
         var tokens = this._tokenize(document);
+        this.documentCount++;
         for (var i = 0; i < tokens.length; i++) {
             var token = tokens[i].toLowerCase();
             if (this.indexMap[token] === undefined) {
@@ -22,6 +25,12 @@ function Index() {
     };
 
     this._tokenize = function(object) {
+        return _.map(this._createTokens(object), function (token) {
+            return token.toLowerCase();
+        });
+    };
+
+    this._createTokens = function(object) {
         var that = this;
         if (_.isUndefined(object) || _.isNull(object)) {
             return [];
@@ -52,6 +61,9 @@ function Index() {
     this.search = function(term) {
         var searchTermTokens = this._tokenize(term);
         var that = this;
+
+        // searchTermTokens = this._dropDuplicates(searchTermTokens);
+
         var allTokenDocuments = _.map(searchTermTokens, function(token) {
             return that.indexMap[token.toLowerCase()] || [];
         });
@@ -68,8 +80,56 @@ function Index() {
                 searchResults.push(document);
             }
         }
-        return searchResults;
+        return searchResults.sort(this._createDocumentComparator(searchTermTokens));
     };
+
+
+    this._createDocumentComparator = function (searchTermTokens){
+        return function (doc1, doc2) {
+            return that._getDocumentRelevance(searchTermTokens, doc2) - that._getDocumentRelevance(searchTermTokens, doc1);
+        }
+    };
+
+    this._getDocumentRelevance = function (searchTermTokens, document) {
+        var that = this;
+        return _.reduce(searchTermTokens, function(sum, token) {           
+            return sum + that._getDocumentRelevanceForToken(token, document);
+        }, 0);
+    };
+
+    this._getDocumentRelevanceForToken = function(token, document){
+        return this._countFrequency(token, document) * this._inverseDocumentFrequency (token); 
+    };
+
+    this._countFrequency = function(token, document) {
+        var tokens = this._tokenize(document);
+
+        /* Die Schleife ist lesbarer
+
+        return _.reduce(tokens, function(count, currentToken) {
+            if (token === currentToken) {
+                count++;
+            }
+            return count;
+        }, 0);
+*/
+        var count = 0;
+        for (var i = 0; i < tokens.length; i++) {
+            if (tokens[i] === token) {
+                count++;
+            }
+        };
+        return count;
+    };
+
+    this._inverseDocumentFrequency = function(token) {
+        if (this.indexMap[token] === undefined) {
+            throw "Token war nicht im Index: " + token; 
+            return 1;       
+        } else {
+            return Math.log(this.documentCount / this.indexMap[token].length);
+        }
+    }
 
     this.split = function(text) {
         return _.without(text.split(/[., :;!?\t\r\n]/), "");

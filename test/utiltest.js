@@ -41,6 +41,7 @@ describe("Utility test", function() {
         });
         it("...arrays with different length are not equals", function() {
             expect(Util.arrayEqualsWithoutOrdering([1], [1, 2])).toBe(false);
+            expect(Util.arrayEqualsWithoutOrdering([1, 1, 2], [1, 2])).toBe(false);
         });
         it("... empty arrays are equals", function() {
             expect(Util.arrayEqualsWithoutOrdering([], [])).toBe(true);
@@ -54,7 +55,12 @@ describe("Utility test", function() {
         });
         it("... arrays with same elements in different order are equal", function() {
             expect(Util.arrayEqualsWithoutOrdering([1, 2], [2, 1])).toBe(true);
+            expect(Util.arrayEqualsWithoutOrdering([1, 2, 1], [2, 1, 1])).toBe(true);
+            expect(Util.arrayEqualsWithoutOrdering([true, false, true, false], [false, false, true, true])).toBe(true);
+            expect(Util.arrayEqualsWithoutOrdering(["Eins", "Zwei", "Juhu", "  ", "AbIIDc3215"], ["AbIIDc3215", "Zwei", "Juhu", "  ", "Eins"])).toBe(true);
+            expect(Util.arrayEqualsWithoutOrdering([" ", "  "], ["  ", " "])).toBe(true);
         });
+
 
         it("... does not change input parameters", function() {
             var param1 = [1, 2];
@@ -63,5 +69,23 @@ describe("Utility test", function() {
             expect(param1).toEqual([1, 2]);
             expect(param2).toEqual([2, 1]);
         });
+
+
     });
+
+    ddescribe("dropping duplicates from array for ...", function () {
+        it("... empty array", function() {
+            expect(Util.dropDuplicates([])).toEqual([]) ;
+        });
+        
+        it("... without duplicates", function() {
+            expect(Util.dropDuplicates(["und","oder"])).toEqual(["und","oder"]) ;
+        });
+
+        it("... without duplicates", function() {
+            expect(Util.dropDuplicates(["und","und"])).toEqual(["und"]) ;
+        });
+
+     });
+
 });
